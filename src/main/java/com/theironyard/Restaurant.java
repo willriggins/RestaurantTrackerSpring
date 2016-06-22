@@ -23,4 +23,18 @@ public class Restaurant {
 
     @Column(nullable = false)
     String comment;
+
+    @ManyToOne //this makes it so there are many of the class we are in to the class we put on the next line
+    User user;
+
+    public Restaurant() {
+    }
+
+    public Restaurant(String name, String location, int rating, String comment, User user) {
+        this.name = name;
+        this.location = location;
+        this.rating = rating;
+        this.comment = comment;
+        this.user = user;
+    }
 }
