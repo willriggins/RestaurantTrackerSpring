@@ -21,9 +21,9 @@ public class RTController {
     RestaurantRepository restaurants;
 
     @PostConstruct
-    public void init() {
+    public void init() throws PasswordStorage.CannotPerformOperationException {
         if (users.count() == 0) {
-            User user = new User("Will", "123");
+            User user = new User("Will", PasswordStorage.createHash("pass"));
             users.save(user);
         }
     }
@@ -62,10 +62,10 @@ public class RTController {
 
         User user = users.findByName(username);
         if (user == null) {
-            user = new User(username, password);
+            user = new User(username, PasswordStorage.createHash(password));
             users.save(user);
         }
-        else if (!user.password.equals(password)) {
+        else if (!PasswordStorage.verifyPassword(password, user.password)) {
             throw new Exception("Wrong password!");
         }
         session.setAttribute("username", username);
